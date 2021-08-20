@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+          <div class="col-md-12">
+
+            <h3 class="display-4 my-3">{{ post.title }}</h3>
+            <h5 class="text-muted">Published on {{ post.created_date }}</h5>
+<!--            <svg class="bd-placeholder-img my-3 card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
+              <img src="/media/{{ post.image }}" class="w-100 my-3">
+              <p class="card-text">{{ post.text|safe }}</p>
+          </div>
+
+<br>
+<!--  Comments -->
+<div class="col-md-12 card mb-4  mt-3 ">
+      <div class="card-body">
+        <h2>{{ comments.count }} comments</h2>
+
+        {% for comment in comments %}
+        <div class="comments" style="padding: 10px;">
+          <p class="font-weight-bold">
+            {{ comment.name }}
+            <span class=" text-muted font-weight-normal">
+              {{ comment.created_on }}
+            </span>
+          </p>
+          {{ comment.body | safe  }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-md-12 card mb-4  mt-3 ">
+      <div class="card-body">
+        {% if new_comment %}
+        <div class="alert alert-success" role="alert">
+          Your comment is awaiting moderation
+        </div>
+        {% else %}
+        <h3>Leave a comment</h3>
+        <form method="post" style="margin-top: 1.3em;">
+          {{ comment_form|crispy  }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+
+
+
+
+{% endblock %}
